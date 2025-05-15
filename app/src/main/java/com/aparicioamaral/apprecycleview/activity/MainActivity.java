@@ -1,6 +1,9 @@
 package com.aparicioamaral.apprecycleview.activity;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.aparicioamaral.apprecycleview.R;
 import com.aparicioamaral.apprecycleview.adapter.Adapter;
 import com.aparicioamaral.apprecycleview.model.Disciplina;
+import com.aparicioamaral.apprecycleview.util.RecyclerItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +55,41 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
 
         recyclerView.setAdapter( adapter );
+
+        //evento de click
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(
+                        getApplicationContext(),
+                        recyclerView,
+                        new RecyclerItemClickListener.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
+                                Disciplina d = disciplinas.get(position);
+
+                                //no clique simples vamos exibir apeanas o dia e a sala
+                                Toast.makeText(MainActivity.this,
+                                        d.getDiaSemanda() + " - " + d.getSala(), Toast.LENGTH_SHORT).show();
+
+                            }
+
+                            @Override
+                            public void onLongItemClick(View view, int position) {
+                                Disciplina d = disciplinas.get(position);
+
+                                //no click longo vamos exibir o nome da disciplina e professor
+                                Toast.makeText(MainActivity.this,
+                                        d.getNomeDisciplina() + " - " + d.getProfessor(),Toast.LENGTH_SHORT).show();
+
+                            }
+
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                            }
+                        }
+                )
+        );
+
     } //fim do OnCreat
 
     public void criarDisciplinas() {
